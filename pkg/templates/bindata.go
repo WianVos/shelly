@@ -2,7 +2,10 @@
 // sources:
 // data/licenses/Apache2.tmpl
 // data/licenses/MIT.tmpl
-// data/templates/tasks
+// data/templates/defaults/main.yml
+// data/templates/handlers/main.yml
+// data/templates/tasks/main.yml
+// data/templates/vars/main.yml
 // DO NOT EDIT!
 
 package templates
@@ -110,22 +113,82 @@ func licensesMitTmpl() (*asset, error) {
 	return a, nil
 }
 
-var _templatesTasks = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\xd2\xd5\xd5\xe5\x02\x04\x00\x00\xff\xff\xbd\xce\x76\x83\x04\x00\x00\x00")
+var _templatesDefaultsMainYml = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\xd2\xd5\xd5\xe5\xaa\xae\x56\xd0\x4b\xce\xcf\xcd\x4d\xcd\x2b\xf1\x4d\x2c\xca\x4e\x2d\x52\xa8\xad\x05\x0b\x96\xa4\x16\x97\x18\x2a\xd4\xd6\x02\x02\x00\x00\xff\xff\x33\xd9\x47\x74\x25\x00\x00\x00")
 
-func templatesTasksBytes() ([]byte, error) {
+func templatesDefaultsMainYmlBytes() ([]byte, error) {
 	return bindataRead(
-		_templatesTasks,
-		"templates/tasks",
+		_templatesDefaultsMainYml,
+		"templates/defaults/main.yml",
 	)
 }
 
-func templatesTasks() (*asset, error) {
-	bytes, err := templatesTasksBytes()
+func templatesDefaultsMainYml() (*asset, error) {
+	bytes, err := templatesDefaultsMainYmlBytes()
 	if err != nil {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/tasks", size: 4, mode: os.FileMode(420), modTime: time.Unix(1510224396, 0)}
+	info := bindataFileInfo{name: "templates/defaults/main.yml", size: 37, mode: os.FileMode(420), modTime: time.Unix(1510585455, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesHandlersMainYml = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\xd2\xd5\xd5\xe5\xaa\xae\x56\xd0\x2b\x49\x2d\x2e\x31\x52\xa8\xad\x05\x04\x00\x00\xff\xff\x52\x43\x4b\xed\x10\x00\x00\x00")
+
+func templatesHandlersMainYmlBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesHandlersMainYml,
+		"templates/handlers/main.yml",
+	)
+}
+
+func templatesHandlersMainYml() (*asset, error) {
+	bytes, err := templatesHandlersMainYmlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/handlers/main.yml", size: 16, mode: os.FileMode(420), modTime: time.Unix(1510585462, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesTasksMainYml = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\xd2\xd5\xd5\xe5\xaa\xae\x56\xd0\x2b\x49\x2d\x2e\x31\x56\xa8\xad\x05\x04\x00\x00\xff\xff\x37\x24\xf7\x55\x10\x00\x00\x00")
+
+func templatesTasksMainYmlBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesTasksMainYml,
+		"templates/tasks/main.yml",
+	)
+}
+
+func templatesTasksMainYml() (*asset, error) {
+	bytes, err := templatesTasksMainYmlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/tasks/main.yml", size: 16, mode: os.FileMode(420), modTime: time.Unix(1510585469, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesVarsMainYml = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\xd2\xd5\xd5\xe5\xaa\xae\x56\xd0\x2b\x49\x2d\x2e\x31\x51\xa8\xad\x05\x04\x00\x00\xff\xff\x8e\x1c\x20\xc8\x10\x00\x00\x00")
+
+func templatesVarsMainYmlBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesVarsMainYml,
+		"templates/vars/main.yml",
+	)
+}
+
+func templatesVarsMainYml() (*asset, error) {
+	bytes, err := templatesVarsMainYmlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/vars/main.yml", size: 16, mode: os.FileMode(420), modTime: time.Unix(1510585476, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -183,8 +246,11 @@ func AssetNames() []string {
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
 	"licenses/Apache2.tmpl": licensesApache2Tmpl,
-	"licenses/MIT.tmpl":     licensesMitTmpl,
-	"templates/tasks":       templatesTasks,
+	"licenses/MIT.tmpl": licensesMitTmpl,
+	"templates/defaults/main.yml": templatesDefaultsMainYml,
+	"templates/handlers/main.yml": templatesHandlersMainYml,
+	"templates/tasks/main.yml": templatesTasksMainYml,
+	"templates/vars/main.yml": templatesVarsMainYml,
 }
 
 // AssetDir returns the file names below a certain
@@ -226,14 +292,24 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
 	"licenses": &bintree{nil, map[string]*bintree{
 		"Apache2.tmpl": &bintree{licensesApache2Tmpl, map[string]*bintree{}},
-		"MIT.tmpl":     &bintree{licensesMitTmpl, map[string]*bintree{}},
+		"MIT.tmpl": &bintree{licensesMitTmpl, map[string]*bintree{}},
 	}},
 	"templates": &bintree{nil, map[string]*bintree{
-		"tasks": &bintree{templatesTasks, map[string]*bintree{}},
+		"defaults": &bintree{nil, map[string]*bintree{
+			"main.yml": &bintree{templatesDefaultsMainYml, map[string]*bintree{}},
+		}},
+		"handlers": &bintree{nil, map[string]*bintree{
+			"main.yml": &bintree{templatesHandlersMainYml, map[string]*bintree{}},
+		}},
+		"tasks": &bintree{nil, map[string]*bintree{
+			"main.yml": &bintree{templatesTasksMainYml, map[string]*bintree{}},
+		}},
+		"vars": &bintree{nil, map[string]*bintree{
+			"main.yml": &bintree{templatesVarsMainYml, map[string]*bintree{}},
+		}},
 	}},
 }}
 
@@ -283,3 +359,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+

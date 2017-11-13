@@ -25,12 +25,17 @@ package cmd
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	jww "github.com/spf13/jwalterweatherman"
+	"github.com/wianvos/shelly/pkg/templates"
 )
 
 var subDirs = []string{"tasks", "vars", "templates", "test", "files", "handlers", "meta"}
+var outputDir string
+var roleName string
+var license string
 
 // CreateCommand represents the base command when called without any subcommands
 var CreateCommand = &cobra.Command{
@@ -40,13 +45,22 @@ var CreateCommand = &cobra.Command{
 }
 
 func init() {
+	CreateCommand.PersistentFlags().StringVarP(&roleName, "name", "n", "", "the name of the role to create")
+	CreateCommand.PersistentFlags().StringVarP(&outputDir, "out", "o", getCurrentDir()+roleName, "specify an output Directory for the code")
+	CreateCommand.PersistentFlags().StringVarP(&license, "license", "l", "MIT", "specify a license to use in regard to this role")
 
 	RootCmd.AddCommand(CreateCommand)
 
 }
 
 func createCommand(cmd *cobra.Command, args []string) {
+
 	basePath := filepath.Join(outputDir, roleName)
+	fts := templates.NewFileTemplates()
+
+	// get the variables we need to do our thing
+	data := splitArgsIntoKVPair(args[0])
+	fts.AddData(data)
 
 	// create directory
 
@@ -65,4 +79,22 @@ func createCommand(cmd *cobra.Command, args []string) {
 
 	// create files
 
+	for _, t := range fts {
+		t.Write(basePath)
+
+	}
+
+}
+
+func splitArgsIntoKVPair(s string) map[string]string {
+
+	m := make(map[string]string)
+	ss := strings.Split(s, ",")
+
+	for _, pair := range ss {
+		z := strings.Split(pair, "=")
+		m[z[0]] = z[1]
+	}
+
+	return m
 }

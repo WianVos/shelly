@@ -31,8 +31,7 @@ import (
 	jww "github.com/spf13/jwalterweatherman"
 )
 
-var outputDir string
-var roleName string
+
 var verbose bool
 
 // RootCmd represents the base command when called without any subcommands
@@ -57,9 +56,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Verbose output")
-	RootCmd.PersistentFlags().StringVarP(&roleName, "name", "n", "", "the name of the role to create")
-	RootCmd.PersistentFlags().StringVarP(&outputDir, "out", "o", getCurrentDir()+roleName, "specify an output Directory for the code")
-
+	
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 }

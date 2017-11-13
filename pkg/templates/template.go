@@ -23,31 +23,99 @@
 package templates
 
 import (
+	"fmt"
+	"html/template"
+	"os"
+	"path/filepath"
+	"strings"
+
 	jww "github.com/spf13/jwalterweatherman"
 )
 
+const (
+	fileMode = 0770
+)
+
 type FileTemplate struct {
-	TemplateName string
-	Vars         []string
-	License      string
-	Data         []byte
+	Path     string
+	Template *template.Template
+	Data     map[string]string
 }
 
-type AnsTempl interface {
-	render() string
+type FileTemplates []FileTemplate
+
+func NewFileTemplates() FileTemplates {
+
+	f := make(FileTemplates, 0)
+
+	for _, t := range templateAssets() {
+		f = append(f, NewFileTemplate(t))
+	}
+	return f
 }
 
-func (ft FileTemplate) propagateData() {
-	a, err := Asset("templates/" + ft.TemplateName)
+func NewFileTemplate(p string) FileTemplate {
+
+	path := p[len("templates"):len(p)]
+
+	d, err := Asset(p)
 	if err != nil {
-		jww.FATAL.Printf("templates: unable to find template %s", ft.TemplateName)
+		jww.ERROR.Printf("Templates:NewFileTemplate: unable to retrieve data for template: %s : %s", p, err)
 	}
-	ft.Data = a
+	tmpl, _ := template.New(path).Parse(string(d))
+
+	ft := FileTemplate{
+		Path:     path,
+		Template: tmpl,
+	}
+
+	return ft
 }
 
-// New returns a new instance of the FileTemplate name
-func New(n string) FileTemplate {
-	return FileTemplate{
-		TemplateName: n,
+func templateAssets() []string {
+
+	var a = make([]string, 0)
+	for _, t := range AssetNames() {
+		if strings.Contains(t, "templates") {
+			a = append(a, t)
+		}
 	}
+	return a
+}
+
+func (ft FileTemplate) Write(d string) error {
+	f := d + ft.Path
+
+	if _, err := os.Stat(filepath.Dir(f)); err != nil {
+		err := os.MkdirAll(filepath.Dir(f), os.FileMode(fileMode))
+		if err != nil {
+			return err
+		}
+	}
+
+	iow, err := os.OpenFile(f, os.O_WRONLY|os.O_CREATE, 0770)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	ft.Template.Execute(iow, ft.Data)
+
+	return nil
+}
+
+func (ft *FileTemplates) AddData(d map[string]string) {
+
+	fts := *ft
+	fts2 := make(FileTemplates, 0)
+
+	fmt.Println(fts)
+	for _, t := range fts {
+		t.Data = d
+		fts2 = append(fts2, t)
+	}
+
+	fmt.Println(fts)
+	fmt.Println(fts2)
+	*ft = fts2
 }
