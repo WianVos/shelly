@@ -23,9 +23,13 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"os/user"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 	jww "github.com/spf13/jwalterweatherman"
@@ -59,7 +63,11 @@ func createCommand(cmd *cobra.Command, args []string) {
 	fts := templates.NewFileTemplates()
 
 	// get the variables we need to do our thing
-	data := splitArgsIntoKVPair(args[0])
+	var a string
+	if len(args) > 0 {
+		a = args[0]
+	}
+	data := collectData(a)
 	fts.AddData(data)
 
 	// create directory
@@ -89,12 +97,48 @@ func createCommand(cmd *cobra.Command, args []string) {
 func splitArgsIntoKVPair(s string) map[string]string {
 
 	m := make(map[string]string)
+
 	ss := strings.Split(s, ",")
 
-	for _, pair := range ss {
-		z := strings.Split(pair, "=")
-		m[z[0]] = z[1]
+	if len(ss) > 1 {
+		for _, pair := range ss {
+			z := strings.Split(pair, "=")
+			m[z[0]] = z[1]
+		}
+	}
+	return m
+}
+
+func collectData(s string) map[string]string {
+	m := make(map[string]string)
+
+	// name of the role where creating
+	m["role"] = roleName
+
+	// we need to collect
+	// date
+	t := time.Now()
+	m["date"] = t.Format("Jan _2 2006")
+	m["year"] = strconv.Itoa(t.Year())
+	// user
+	u, _ := user.Current()
+	m["userName"] = u.Name
+
+	// license
+	lcs := templates.NewLicenses()
+	lcs.AddData(m)
+	l, err := lcs.GetLicense(license)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	m["license"] = l
+
+	// various crap
+	for k, v := range splitArgsIntoKVPair(s) {
+		m[k] = v
 	}
 
 	return m
+
 }

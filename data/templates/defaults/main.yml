@@ -1,3 +1,2 @@
+{{ .license }}
 ---
-{{ .commentMarker }}
-{{ .test1 }}

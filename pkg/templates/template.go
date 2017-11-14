@@ -24,10 +24,10 @@ package templates
 
 import (
 	"fmt"
-	"html/template"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 
 	jww "github.com/spf13/jwalterweatherman"
 )
@@ -109,13 +109,10 @@ func (ft *FileTemplates) AddData(d map[string]string) {
 	fts := *ft
 	fts2 := make(FileTemplates, 0)
 
-	fmt.Println(fts)
 	for _, t := range fts {
 		t.Data = d
 		fts2 = append(fts2, t)
 	}
 
-	fmt.Println(fts)
-	fmt.Println(fts2)
 	*ft = fts2
 }
